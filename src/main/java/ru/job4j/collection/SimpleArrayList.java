@@ -17,13 +17,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     }
 
     private void grow() {
-        int minCapacity = size + 1;
-        int oldCapacity = container.length;
-        if (oldCapacity > 0) {
-            container = Arrays.copyOf(container, container.length * 2);
-        } else {
-            container = (T[]) new Object[Math.max(DEFAULT_CAPACITY, minCapacity)];
-        }
+        container = Arrays.copyOf(container, container.length == 0 ? 1 : container.length * 2);
     }
 
     @Override
