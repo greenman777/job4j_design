@@ -10,8 +10,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     private int modCount;
 
-    private static final int DEFAULT_CAPACITY = 10;
-
     public SimpleArrayList(int capacity) {
         this.container = (T[]) new Object[capacity];
     }
@@ -31,16 +29,14 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        Objects.checkIndex(index, size);
-        T oldValue = container[index];
+        T oldValue = get(index);
         container[index] = newValue;
         return oldValue;
     }
 
     @Override
     public T remove(int index) {
-        Objects.checkIndex(index, size);
-        T oldValue = container[index];
+        T oldValue = get(index);
         size--;
         if (size > index) {
             System.arraycopy(container, index + 1, container, index, size - index);
