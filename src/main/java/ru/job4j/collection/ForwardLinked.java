@@ -11,11 +11,11 @@ public class ForwardLinked<T> implements Iterable<T> {
     private Node<T> head;
 
     public void add(T value) {
-        ForwardLinked.Node<T> nodeNew = new ForwardLinked.Node<>(value, null);
+        Node<T> nodeNew = new Node<>(value, null);
         if (head == null) {
             head = nodeNew;
         } else {
-            ForwardLinked.Node<T> nodeNext = head;
+            Node<T> nodeNext = head;
             while (nodeNext.next != null) {
                 nodeNext = nodeNext.next;
             }
@@ -25,9 +25,15 @@ public class ForwardLinked<T> implements Iterable<T> {
         modCount++;
     }
 
+    public void addFirst(T value) {
+        head = new Node<>(value, head);
+        size++;
+        modCount++;
+    }
+
     public T get(int index) {
         Objects.checkIndex(index, size);
-        ForwardLinked.Node<T> node = head;
+        Node<T> node = head;
         for (int i = 0; i < index; i++) {
             node = node.next;
         }
@@ -52,7 +58,7 @@ public class ForwardLinked<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<>() {
-            private ForwardLinked.Node<T> next = head;
+            private Node<T> next = head;
             private final int expectedModCount = modCount;
 
             @Override
@@ -68,7 +74,7 @@ public class ForwardLinked<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                ForwardLinked.Node<T> lastReturned = next;
+                Node<T> lastReturned = next;
                 next = next.next;
                 return lastReturned.item;
             }
@@ -77,9 +83,9 @@ public class ForwardLinked<T> implements Iterable<T> {
 
     private static class Node<T> {
         private T item;
-        private ForwardLinked.Node<T> next;
+        private Node<T> next;
 
-        Node(T element, ForwardLinked.Node<T> next) {
+        Node(T element, Node<T> next) {
             this.item = element;
             this.next = next;
         }
