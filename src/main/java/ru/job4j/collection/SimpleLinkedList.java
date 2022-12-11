@@ -10,17 +10,19 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
     private int size = 0;
     private int modCount = 0;
     private Node<E> head;
-    private Node<E> tail;
 
     @Override
     public void add(E value) {
-        Node<E> node = new Node<>(value, null);
-        if (tail == null) {
-            head = node;
+        Node<E> nodeNew = new Node<>(value, null);
+        if (head == null) {
+            head = nodeNew;
         } else {
-            tail.next = node;
+            Node<E> nodeNext = head;
+            while (nodeNext.next != null) {
+                nodeNext = nodeNext.next;
+            }
+            nodeNext.next = nodeNew;
         }
-        tail = node;
         size++;
         modCount++;
     }
