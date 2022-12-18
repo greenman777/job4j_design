@@ -11,7 +11,7 @@ public class ListUtils {
     }
 
     public static <T> void addAfter(List<T> list, int index, T value) {
-        Objects.checkIndex(index + 1, list.size());
+        Objects.checkIndex(index, list.size());
         list.add(index + 1, value);
     }
 
@@ -35,9 +35,6 @@ public class ListUtils {
     }
 
     public static <T> void removeAll(List<T> list, List<T> elements) {
-        for (T el: elements) {
-            removeIf(list, e -> e == el);
-        }
+        removeIf(list, elements::contains);
     }
-
 }
