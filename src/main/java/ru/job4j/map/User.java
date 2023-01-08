@@ -17,11 +17,12 @@ public class User {
 
     public static void main(String[] args) {
         Map<User, Object> map = new HashMap<>();
-        User user1 = new User("Ivan", 2, Calendar.getInstance());
+        Calendar birthday = Calendar.getInstance();
+        User user1 = new User("Ivan", 2, birthday);
         int hashCode1 = user1.hashCode();
         int hash1 = hashCode1 ^ (hashCode1 >>> 16);
         int bucket1 = hash1 & 15;
-        User user2 = new User("Ivan", 2, Calendar.getInstance());
+        User user2 = new User("Ivan", 2, birthday);
         int hashCode2 = user2.hashCode();
         int hash2 = hashCode2 ^ (hashCode2 >>> 16);
         int bucket2 = hash2 & 15;
