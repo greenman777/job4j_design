@@ -44,10 +44,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
         capacity *= 2;
         MapEntry<K, V>[] tableNew = new MapEntry[capacity];
         for (MapEntry<K, V> node : table) {
-            if (Objects.isNull(node)) {
-                continue;
+            if (Objects.nonNull(node)) {
+                tableNew[indexForKey(node.key)] = node;
             }
-            tableNew[indexForKey(node.key)] = new MapEntry<>(node.key, node.value);
         }
         table = tableNew;
     }
