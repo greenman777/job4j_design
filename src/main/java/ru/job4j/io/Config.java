@@ -20,8 +20,8 @@ public class Config {
                 continue;
             }
             String[] paramsStr = line.split("=", 2);
-            String key = paramsStr.length >=1 ? paramsStr[0] : "";
-            String value = paramsStr.length ==2 ? paramsStr[1] : "";
+            String key = paramsStr.length >= 1 ? paramsStr[0] : "";
+            String value = paramsStr.length == 2 ? paramsStr[1] : "";
             if ("".equals(key) || "".equals(value)) {
                 throw new IllegalArgumentException();
             }
