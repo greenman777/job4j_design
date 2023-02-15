@@ -14,24 +14,26 @@ public class Config {
         this.path = path;
     }
 
-    private void checkAndPut(String line) {
+    private boolean checkLine(String line) {
+        boolean result = true;
         if ("".equals(line) || line.charAt(0) == '#') {
-            return;
-        }
-        String[] paramsStr = line.split("=", 2);
-        String key = paramsStr.length >= 1 ? paramsStr[0] : "";
-        String value = paramsStr.length == 2 ? paramsStr[1] : "";
-        if ("".equals(key) || "".equals(value)) {
+            result = false;
+        } else if (!line.matches("[^=].+=.+")) {
             throw new IllegalArgumentException();
         }
-        values.put(key, value);
+        return result;
     }
 
     public void load() {
         try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
             String line;
             while ((line = read.readLine()) != null) {
-                checkAndPut(line);
+                if (checkLine(line)) {
+                    String[] paramsStr = line.split("=", 2);
+                    String key = paramsStr[0];
+                    String value = paramsStr[1];
+                    values.put(key, value);
+                }
             }
             read.readLine();
         } catch (IOException e) {
