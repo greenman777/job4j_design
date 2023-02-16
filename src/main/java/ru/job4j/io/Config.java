@@ -16,7 +16,7 @@ public class Config {
 
     private boolean checkLine(String line) {
         boolean result = true;
-        if ("".equals(line) || line.charAt(0) == '#') {
+        if (line.isBlank() || line.startsWith("#")) {
             result = false;
         } else if (!line.matches("[^=].+=.+")) {
             throw new IllegalArgumentException();
