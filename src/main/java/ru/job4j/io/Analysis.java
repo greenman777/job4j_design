@@ -1,33 +1,22 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Analysis {
     public void unavailable(String source, String target) {
         try (BufferedReader read = new BufferedReader(new FileReader(source));
-             PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream(target)))) {
-            List<String> downtime = new ArrayList<>();
-            boolean newPeriod = true, foundPeriod = false;
-            String line, status, time, start = "", stop;
+             PrintWriter out = new PrintWriter(new FileOutputStream(target))) {
+            String line, start = null, stop;
             while ((line = read.readLine()) != null) {
-                status = line.split("\s")[0];
-                time = line.split("\s")[1];
-                if ("400".equals(status) || "500".equals(status)) {
-                    if (newPeriod) {
-                        start = time;
-                        newPeriod = false;
-                        foundPeriod = true;
-                    }
-                } else if (foundPeriod) {
-                    stop = time;
-                    downtime.add(start + ";" + stop + ";");
-                    newPeriod = true;
-                    foundPeriod = false;
+                String[] split = line.split("\s");
+                if ("400".equals(split[0]) || "500".equals(split[0]) && start == null) {
+                    start = split[1];
+                } else if (start != null) {
+                    stop = split[1];
+                    out.printf("%s;%s;\n", start, stop);
+                    start = null;
                 }
             }
-            downtime.forEach(out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
