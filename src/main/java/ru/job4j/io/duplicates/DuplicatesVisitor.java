@@ -14,19 +14,19 @@ import java.util.Set;
 import static java.nio.file.FileVisitResult.CONTINUE;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
-    Map<FileProperty, Path> fileDoubleMap = new HashMap<>();
-    Set<Path> fileDoubleSet = new HashSet<>();
+    private final Map<FileProperty, Path> fileDuplicateMap = new HashMap<>();
+    private final Set<Path> fileDuplicateSet = new HashSet<>();
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        Path path = fileDoubleMap.put(new FileProperty(Files.size(file), file.getFileName().toString()), file);
+        Path path = fileDuplicateMap.put(new FileProperty(Files.size(file), file.getFileName().toString()), file);
         if (path != null) {
-            if (fileDoubleSet.add(path)) {
-                System.out.println(path.toAbsolutePath());
-            }
-            if (fileDoubleSet.add(file)) {
-                System.out.println(file.toAbsolutePath());
-            }
+            fileDuplicateSet.add(path);
+            fileDuplicateSet.add(file);
         }
         return CONTINUE;
+    }
+
+    public void printDuplicate() {
+        fileDuplicateSet.forEach(path -> System.out.println(path.toAbsolutePath()));
     }
 }
