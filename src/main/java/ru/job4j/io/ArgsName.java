@@ -15,30 +15,36 @@ public class ArgsName {
         return value;
     }
 
-    private void parse(String[] args) {
-        if (args.length == 0) {
+    private boolean validate(String arg) {
+        if (!arg.matches("[^=]-?.+=.+")) {
             throw new IllegalArgumentException();
         }
+        return true;
+    }
+
+    private void parse(String[] args) {
         for (String arg : args) {
-            String[] argParam = arg.split("=", 2);
-            if (!arg.matches("[^=]-?.+=.+") || argParam.length != 2) {
-                throw new IllegalArgumentException();
+            if (validate(arg)) {
+                String[] argParam = arg.split("=", 2);
+                values.put(argParam[0].substring(1), argParam[1]);
             }
-            values.put(argParam[0].substring(1), argParam[1]);
         }
     }
 
     public static ArgsName of(String[] args) {
+        if (args.length == 0) {
+            throw new IllegalArgumentException();
+        }
         ArgsName names = new ArgsName();
         names.parse(args);
         return names;
     }
 
     public static void main(String[] args) {
-        ArgsName jvm = ArgsName.of(new String[] {"-Xmx=512", "-encoding=UTF-8"});
+        ArgsName jvm = ArgsName.of(new String[]{"-Xmx=512", "-encoding=UTF-8"});
         System.out.println(jvm.get("Xmx"));
 
-        ArgsName zip = ArgsName.of(new String[] {"-out=project.zip", "-encoding=UTF-8"});
+        ArgsName zip = ArgsName.of(new String[]{"-out=project.zip", "-encoding=UTF-8"});
         System.out.println(zip.get("out"));
     }
 }
