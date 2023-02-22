@@ -15,19 +15,17 @@ public class ArgsName {
         return value;
     }
 
-    private boolean validate(String arg) {
+    private void validate(String arg) {
         if (!arg.matches("[^=]-?.+=.+")) {
             throw new IllegalArgumentException();
         }
-        return true;
     }
 
     private void parse(String[] args) {
         for (String arg : args) {
-            if (validate(arg)) {
-                String[] argParam = arg.split("=", 2);
-                values.put(argParam[0].substring(1), argParam[1]);
-            }
+            validate(arg);
+            String[] argParam = arg.split("=", 2);
+            values.put(argParam[0].substring(1), argParam[1]);
         }
     }
 
