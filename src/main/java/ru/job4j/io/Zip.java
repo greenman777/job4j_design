@@ -11,38 +11,25 @@ import static ru.job4j.io.Search.search;
 
 public class Zip {
 
-    private Path directory;
-    private String exclude;
-    private File output;
-
-    public void validate(String[] args) {
+    private static String[] validate(String[] args) {
         ArgsName argsParam = ArgsName.of(args);
-        setDirectory(Path.of(argsParam.get("d")));
-        if (!Files.isDirectory(getDirectory())) {
+        String[] params = new String[3];
+        params[0] = argsParam.get("d");
+        if (!Files.isDirectory(Path.of(params[0]))) {
             throw new IllegalArgumentException();
         }
-        setExclude(argsParam.get("e"));
-        setOutput(new File(argsParam.get("o")));
+        params[1] = argsParam.get("e");
+        params[2] = argsParam.get("o");
+        return params;
     }
 
-    public void packFiles(List<File> sources, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            for (File source : sources) {
-                zip.putNextEntry(new ZipEntry(source.getPath()));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
+    public void packFiles(List<Path> sources, Path target) {
+        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target.toFile())))) {
+            for (Path source : sources) {
+                zip.putNextEntry(new ZipEntry(source.toString()));
+                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source.toFile()))) {
                     zip.write(out.readAllBytes());
                 }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void packSingleFile(File source, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            zip.putNextEntry(new ZipEntry(source.getPath()));
-            try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
-                zip.write(out.readAllBytes());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,38 +39,13 @@ public class Zip {
     public static void main(String[] args) {
 
         try {
+            String[] params = validate(args);
             Zip zip = new Zip();
-            zip.validate(args);
-            zip.packFiles(search(zip.getDirectory(), p -> !p.toFile().getName().endsWith(zip.getExclude())).
-                            stream().map(Path::toFile).toList(), zip.getOutput());
+            zip.packFiles(search(Path.of(params[0]), p -> !p.toFile().getName().endsWith(params[1])), Path.of(params[2]));
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Path getDirectory() {
-        return directory;
-    }
-
-    public void setDirectory(Path directory) {
-        this.directory = directory;
-    }
-
-    public String getExclude() {
-        return exclude;
-    }
-
-    public void setExclude(String exclude) {
-        this.exclude = exclude;
-    }
-
-    public File getOutput() {
-        return output;
-    }
-
-    public void setOutput(File output) {
-        this.output = output;
     }
 }
