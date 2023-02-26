@@ -23,7 +23,7 @@ public class ConsoleChat {
         boolean continueAnswer = true;
         String question = scanner.nextLine();
         while (!(OUT.equals(question))) {
-            log.add(question + System.lineSeparator());
+            log.add(question);
             if (STOP.equals(question)) {
                 continueAnswer = false;
             }
@@ -32,19 +32,19 @@ public class ConsoleChat {
             }
             if (continueAnswer) {
                 answer = phrases.get(new Random().nextInt(phrases.size()));
-                System.out.print(answer);
+                System.out.println(answer);
                 log.add(answer);
             }
             question = scanner.nextLine();
         }
-        log.add(question + System.lineSeparator());
+        log.add(question);
         saveLog(log);
     }
 
     private List<String> readPhrases() {
         List<String> strings = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            br.lines().map(s -> s + System.lineSeparator()).forEach(strings::add);
+            br.lines().forEach(strings::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class ConsoleChat {
 
     private void saveLog(List<String> log) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(botAnswers, true))) {
-            log.forEach(pw::print);
+            log.forEach(pw::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
