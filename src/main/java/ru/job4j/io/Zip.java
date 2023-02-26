@@ -23,7 +23,7 @@ public class Zip {
             throw new IllegalArgumentException();
         }
         params[2] = argsParam.get("o");
-        if (!params[2].matches("^[^/:*?\"<>|\\\\]*")) {
+        if (!params[2].matches("^[^/:*?\"<>|\\\\](.+)\\.zip")) {
             throw new IllegalArgumentException();
         }
         return params;
