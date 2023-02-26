@@ -42,10 +42,8 @@ public class Zip {
             String[] params = validate(args);
             Zip zip = new Zip();
             zip.packFiles(search(Path.of(params[0]), p -> !p.toFile().getName().endsWith(params[1])), Path.of(params[2]));
-        } catch (IllegalArgumentException exception) {
+        } catch (IllegalArgumentException | IOException exception) {
             exception.printStackTrace();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
