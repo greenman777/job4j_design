@@ -19,7 +19,13 @@ public class Zip {
             throw new IllegalArgumentException();
         }
         params[1] = argsParam.get("e");
+        if (!params[1].matches("^\\.(.+)$")) {
+            throw new IllegalArgumentException();
+        }
         params[2] = argsParam.get("o");
+        if (!params[2].matches("^[^/:*?\"<>|\\\\]*")) {
+            throw new IllegalArgumentException();
+        }
         return params;
     }
 
